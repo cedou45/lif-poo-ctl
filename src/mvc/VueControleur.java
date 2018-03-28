@@ -60,20 +60,9 @@ public class VueControleur extends Application {
                 }
                 
             
-            }
-            // un controleur (EventHandler) par bouton écoute et met à jour le champ affichage
-            /*t.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                
-                @Override
-                public void handle(MouseEvent event) {
-                    affichage.setText(affichage.getText() + t.getText());
-                }
-                
-            });*/
-            
-            
-            
+            }    
         }
+        
         gPane.setGridLinesVisible(true);
         StackPane root = new StackPane();
         root.getChildren().add(gPane);

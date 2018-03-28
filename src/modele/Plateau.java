@@ -138,5 +138,16 @@ public class Plateau extends Observable {
         }
         this.chemins.remove(chemin);
     }
+    
+    private boolean caseVide(){
+        for(int i = 0;i<this.hauteur;i++){
+            for(int j = 0;j<this.largeur;j++){
+                if(!this.cases[i][j].hasChemin()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
