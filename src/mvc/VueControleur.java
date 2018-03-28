@@ -7,11 +7,8 @@ package mvc;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import modele.Case;
 import modele.Plateau;
@@ -51,17 +48,8 @@ public class VueControleur extends Application {
             for (int j = 0; j < plateau.largeur; j++) {
                 Case c = plateau.cases[i][j];
                 DragPane p = new DragPane(i, j, plateau, c);
-                p.setPrefSize(tailleCase, tailleCase);
-                if (plateau.cases[i][j].symbole != 0) {
-                    ImageView image = new ImageView(new Image("image/" + plateau.cases[i][j].symbole + ".jpg"));
-                    image.setFitWidth(tailleCase);
-                    image.setFitHeight(tailleCase);
-                    p.getChildren().add(image);
-                } else {
-                    Text textIO = new Text(c.getEntree() + " | " + c.getSortie());
-                    p.getChildren().add(textIO);
-                }
                 this.tuiles[i][j] = p;
+                p.update();
                 gPane.add(p, j, i);
             }
             // un controleur (EventHandler) par bouton écoute et met à jour le champ affichage

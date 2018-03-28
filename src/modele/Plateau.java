@@ -93,7 +93,7 @@ public class Plateau extends Observable {
         System.out.println("ajouterCaseChemin");
         if (this.cheminActuel != null) {
             Case suivante = this.cases[x][y];
-            if (suivante != this.cheminActuel.getDerniere() && suivante.estVoisine(this.cheminActuel.getDerniere())) {
+            if (suivante != this.cheminActuel.getDerniere() && !suivante.hasChemin() && suivante.estVoisine(this.cheminActuel.getDerniere())) {
                 this.cheminActuel.ajouterCase(suivante);
 
                 setChanged();

@@ -18,6 +18,7 @@ public class Chemin implements Iterable<Case> {
 
     public void ajouterCase(Case suivante) {
         this.trace.add(suivante);
+        suivante.setChemin(this);
         if (this.trace.size() > 1) {
             Case precedente = this.trace.get(this.trace.size() - 2);
             precedente.setSortie(suivante);
