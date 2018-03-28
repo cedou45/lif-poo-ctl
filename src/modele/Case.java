@@ -6,7 +6,7 @@ package modele;
 public class Case {
     public final int ligne;
     public final int colonne;
-    private final int symbole;
+    public final int symbole;
     private Chemin chemin;
 
     Case(int ligne, int colonne, int symbole) {

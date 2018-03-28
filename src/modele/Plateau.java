@@ -10,9 +10,9 @@ import java.util.Scanner;
  * Créé par victor le 28/03/18.
  */
 public class Plateau extends Observable {
-    private final int hauteur;
-    private final int largeur;
-    private final Case[][] cases;
+    public final int hauteur;
+    public final int largeur;
+    public final Case[][] cases;
     public final ArrayList<Chemin> chemins;
     private Chemin cheminActuel;
 
