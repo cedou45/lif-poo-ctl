@@ -1,6 +1,7 @@
-package modele;
+import modele.Plateau;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 /**
