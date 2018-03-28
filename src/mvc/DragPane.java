@@ -1,5 +1,8 @@
 package mvc;
 
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import modele.Case;
@@ -14,6 +17,10 @@ public class DragPane extends Pane {
     DragPane(int ligne, int colonne, Plateau plateau, Case c) {
         this.c = c;
         this.setOnDragDetected(event -> {
+            Dragboard db = this.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString("");
+            db.setContent(content);
             plateau.commencerChemin(ligne, colonne);
             event.consume();
         });
@@ -21,26 +28,13 @@ public class DragPane extends Pane {
             plateau.ajouterCaseChemin(ligne, colonne);
             event.consume();
         });
-        this.setOnDragExited(event -> {
-            plateau.terminerChemin();
-            event.consume();
-        });
         this.setOnDragDone(event -> {
-            System.out.println("setOnDragDone");
-            event.consume();
-        });
-        this.setOnDragDropped(event -> {
-            System.out.println("setOnDragDropped");
-            event.consume();
-        });
-        this.setOnDragOver(event -> {
-            System.out.println("setOnDragOver");
+            plateau.terminerChemin();
             event.consume();
         });
     }
 
     void update() {
-        System.out.println(this);
         if (this.c.symbole == 0) {
             ((Text) this.getChildren().get(0)).setText(this.c.getEntree() + " | " + this.c.getSortie());
         }
