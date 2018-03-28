@@ -19,9 +19,7 @@ public class Plateau extends Observable {
     public Plateau(File configFile) throws FileNotFoundException {
         Scanner configScanner = new Scanner(configFile);
         this.hauteur = configScanner.nextInt();
-        System.out.println("Hauteur: " + this.hauteur);
         this.largeur = configScanner.nextInt();
-        System.out.println("Largeur: " + this.largeur);
 
         this.cases = new Case[this.hauteur][this.largeur];
         for (int i = 0; i < this.hauteur; ++i) {
@@ -80,44 +78,43 @@ public class Plateau extends Observable {
         return display.toString();
     }
 
-    public boolean commencerChemin(int x, int y) {
+    public void commencerChemin(int x, int y) {
+        System.out.println("commencerChemin");
         Case premiere = this.cases[x][y];
         if (premiere.hasSymbol() && !premiere.hasChemin()) {
             this.cheminActuel = new Chemin(premiere);
-            // TODO set Chemin
 
-            return true;
+            setChanged();
+            notifyObservers();
         }
-
-        return false;
     }
 
-    public boolean ajouterCaseChemin(int x, int y) {
+    public void ajouterCaseChemin(int x, int y) {
+        System.out.println("ajouterCaseChemin");
         if (this.cheminActuel != null) {
             Case suivante = this.cases[x][y];
             if (suivante.estVoisine(this.cheminActuel.getDerniere())) {
-                suivante.setChemin(this.cheminActuel);
+                this.cheminActuel.ajouterCase(suivante);
 
-                return true;
+                setChanged();
+                notifyObservers();
             }
         }
-
-        return false;
     }
 
-    public boolean terminerChemin(int x, int y) {
-        Case derniere = this.cases[x][y];
-        if (derniere.isPair(this.cheminActuel.getPremiere())) {
-            derniere.setChemin(this.cheminActuel);
-            this.chemins.add(this.cheminActuel);
-            this.cheminActuel = null;
+    public void terminerChemin() {
+        System.out.println("terminerChemin");
+        if (this.cheminActuel != null) {
+            if (this.cheminActuel.getDerniere().isPair(this.cheminActuel.getPremiere())) {
+                this.chemins.add(this.cheminActuel);
+                this.cheminActuel = null;
+            } else {
+                this.effacerChemin(this.cheminActuel);
+            }
 
-            return true;
-        } else {
-            this.effacerChemin(this.cheminActuel);
+            setChanged();
+            notifyObservers();
         }
-
-        return false;
     }
 
     public boolean supprimerChemin(int x, int y) {
@@ -134,7 +131,7 @@ public class Plateau extends Observable {
 
     private void effacerChemin(Chemin chemin) {
         for (Case c : chemin) {
-            c.setChemin(null);
+            c.reset();
         }
         this.chemins.remove(chemin);
     }

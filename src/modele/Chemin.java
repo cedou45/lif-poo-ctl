@@ -13,11 +13,16 @@ public class Chemin implements Iterable<Case> {
 
     public Chemin(Case depart) {
         this.trace = new ArrayList<>();
-        this.trace.add(depart);
+        this.ajouterCase(depart);
     }
 
-    public void ajouterCase(Case suivant) {
-        this.trace.add(suivant);
+    public void ajouterCase(Case suivante) {
+        this.trace.add(suivante);
+        if (this.trace.size() > 1) {
+            Case precedente = this.trace.get(this.trace.size());
+            precedente.setSortie(suivante);
+            suivante.setEntree(precedente);
+        }
     }
 
     @Override
