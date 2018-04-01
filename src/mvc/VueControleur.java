@@ -5,6 +5,7 @@
  */
 package mvc;
 
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -18,6 +19,13 @@ import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 /**
  * @author petit
@@ -25,11 +33,56 @@ import java.util.Observer;
 public class VueControleur extends Application {
 
     private DragPane[][] tuiles;
-
+    private BorderPane PanelAnnuaire = new BorderPane();
+    private BorderPane panelAccueil = new BorderPane();
+    private BorderPane panelJeux = new BorderPane();
+    private Button BoutonFacile = new Button("Facile"); 
+    private Button BoutonRetour = new Button("Retour");
+    private GridPane gPane = new GridPane();
+    
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
+        
+        BoutonFacile.setPrefSize(295, 50);
+        panelAccueil.setCenter(BoutonFacile);
+        
+        gPane.setGridLinesVisible(true);
+        panelJeux.setCenter(gPane);
+        
+        BoutonFacile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                String configFilename = "beginner.level";
+                try {
+                    gPaneConfig(configFilename);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                PanelAnnuaire.setCenter(panelJeux);
+            }
+        });
+        
+        
+        
+        PanelAnnuaire.setCenter(panelAccueil);
+
+        Scene scene = new Scene(PanelAnnuaire, 500, 400);
+
+        primaryStage.setTitle("Casse tête - Lignes");
+        primaryStage.setScene(scene);
+        primaryStage.show();    }
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+    public void gPaneConfig(String configFilename) throws FileNotFoundException{
         int tailleCase = 100;
-        String configFilename = "beginner.level";
         File levelConfig = new File(configFilename);
 
         Plateau plateau;
@@ -42,7 +95,6 @@ public class VueControleur extends Application {
 
         this.tuiles = new DragPane[plateau.hauteur][plateau.largeur];
 
-        GridPane gPane = new GridPane();
         // création des bouton et placement dans la grille
         for (int i = 0; i < plateau.hauteur; i++) {
             for (int j = 0; j < plateau.largeur; j++) {
@@ -76,24 +128,6 @@ public class VueControleur extends Application {
                 }
             }
         });
-
-
-
-        gPane.setGridLinesVisible(true);
-        StackPane root = new StackPane();
-        root.getChildren().add(gPane);
-
-        Scene scene = new Scene(root, 500, 400);
-
-        primaryStage.setTitle("Casse tête - Lignes");
-        primaryStage.setScene(scene);
-        primaryStage.show();    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }
