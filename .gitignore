@@ -1,3 +1,6 @@
 /.idea/
 projet-poo.iml
 /out/
+*.class
+/build/
+/out/
