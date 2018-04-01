@@ -6,8 +6,12 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineBuilder;
 import javafx.scene.text.Text;
 import modele.Case;
+import modele.Lien;
 import modele.Plateau;
 
 /**
@@ -50,6 +54,53 @@ public class DragPane extends Pane {
         this.setPrefSize(tailleCase, tailleCase);
         if (!this.c.hasSymbol()) {
             this.text.setText(this.c.getEntree() + " | " + this.c.getSortie());
+            this.drawLine(c.getEntree());
+            this.drawLine(c.getSortie());
         }
+    }
+    
+    public void drawLine(Lien entree){
+        Line redLine = LineBuilder.create()
+                        .startX(0)
+                        .startY(0)
+                        .build();
+        if("TOP".equals(entree.name())){
+            redLine = LineBuilder.create()
+                        .startX(this.getWidth()/2)
+                        .startY(0)
+                        .endX(this.getWidth()/2)
+                        .endY(this.getHeight()/2)
+                        .fill(Color.RED)
+                        .build();
+        }
+        if("RIGHT".equals(entree.name())){
+            redLine = LineBuilder.create()
+                        .startX(this.getWidth())
+                        .startY(this.getHeight()/2)
+                        .endX(this.getWidth()/2)
+                        .endY(this.getHeight()/2)
+                        .fill(Color.RED)
+                        .build();
+        }
+        if("BOTTOM".equals(entree.name())){
+            redLine = LineBuilder.create()
+                        .startX(this.getWidth()/2)
+                        .startY(this.getHeight()/2)
+                        .endX(this.getWidth()/2)
+                        .endY(this.getHeight())
+                        .fill(Color.RED)
+                        .build();
+        }
+        if("LEFT".equals(entree.name())){
+            redLine = LineBuilder.create()
+                        .startX(0)
+                        .startY(this.getHeight()/2)
+                        .endX(this.getWidth()/2)
+                        .endY(this.getHeight()/2)
+                        .fill(Color.RED)
+                        .build();
+        }
+        
+        this.getChildren().add(redLine);
     }
 }
