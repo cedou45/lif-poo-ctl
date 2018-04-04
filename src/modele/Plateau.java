@@ -114,16 +114,15 @@ public class Plateau extends Observable {
         }
     }
 
-    public boolean supprimerChemin(int x, int y) {
+    public void supprimerChemin(int x, int y) {
         Case aCase = this.cases[x][y];
         Chemin chemin = aCase.getChemin();
         if (chemin != null) {
             this.effacerChemin(chemin);
 
-            return true;
+            setChanged();
+            notifyObservers();
         }
-
-        return false;
     }
 
     private void effacerChemin(Chemin chemin) {

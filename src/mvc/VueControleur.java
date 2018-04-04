@@ -24,6 +24,15 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Insets;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  * @author petit
@@ -42,15 +51,17 @@ public class VueControleur extends Application {
     
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        
         BoutonFacile.setPrefSize(295, 50);
-        panelAccueil.setTop(BoutonFacile);
-        
         BoutonNormal.setPrefSize(295, 50);
-        panelAccueil.setCenter(BoutonNormal);
-        
         BoutonDifficile.setPrefSize(295, 50);
-        panelAccueil.setBottom(BoutonDifficile);
+        
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
+        vbButtons.getChildren().addAll(BoutonFacile, BoutonNormal, BoutonDifficile);
+        
+        panelAccueil.setCenter(vbButtons);
+        //panelAccueil.setBottom(BoutonDifficile);
         
         gPane.setGridLinesVisible(true);
         panelJeux.setCenter(gPane);
@@ -69,12 +80,39 @@ public class VueControleur extends Application {
             }
         });
         
+        BoutonNormal.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                String configFilename = "normal.level";
+                try {
+                    gPaneConfig(configFilename);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                PanelAnnuaire.setCenter(panelJeux);
+            }
+        });
         
+        BoutonDifficile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                String configFilename = "hard.level";
+                try {
+                    gPaneConfig(configFilename);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                PanelAnnuaire.setCenter(panelJeux);
+            }
+        });
         
+       
         PanelAnnuaire.setCenter(panelAccueil);
 
         Scene scene = new Scene(PanelAnnuaire, 500, 400);
-
+        
         primaryStage.setTitle("Casse tête - Lignes");
         primaryStage.setScene(scene);
         primaryStage.show();    }

@@ -1,9 +1,15 @@
 package mvc;
 
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -42,6 +48,12 @@ public class DragPane extends Pane {
             plateau.terminerChemin();
             event.consume();
         });
+        
+        this.setOnMouseClicked((MouseEvent event) -> {
+            plateau.supprimerChemin(ligne,colonne);
+            event.consume();
+        });
+        
         this.ligneEntree = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
         this.ligneSortie = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
         this.ligneEntree.setStrokeWidth(10);
@@ -59,6 +71,8 @@ public class DragPane extends Pane {
         }
         this.getChildren().add(this.ligneEntree);
         this.getChildren().add(this.ligneSortie);
+        
+        
     }
 
     void update() {
