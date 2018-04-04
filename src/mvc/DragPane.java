@@ -22,7 +22,7 @@ public class DragPane extends Pane {
     private Line ligneSortie;
     private Plateau plateau;
 
-    DragPane(int ligne, int colonne, Plateau plateau, Case c) {
+    DragPane(int ligne, int colonne, Plateau plateau, Case c, Image imageFile) {
         this.setPrefSize(tailleCase, tailleCase);
         this.c = c;
         this.plateau = plateau;
@@ -49,7 +49,7 @@ public class DragPane extends Pane {
         this.ligneEntree.setVisible(false);
         this.ligneSortie.setVisible(false);
         if (this.c.hasSymbol()) {
-            ImageView image = new ImageView(new Image("image/" + this.c.symbole + ".jpg"));
+            ImageView image = new ImageView(imageFile);
             image.setFitWidth(tailleCase);
             image.setFitHeight(tailleCase);
             this.getChildren().add(image);

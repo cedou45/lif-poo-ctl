@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -19,9 +20,7 @@ import modele.Plateau;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.NoSuchElementException;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,7 +79,6 @@ public class VueControleur extends Application {
     }
     
     public void gPaneConfig(String configFilename) throws FileNotFoundException{
-        int tailleCase = 100;
         File levelConfig = new File(configFilename);
 
         Plateau plateau;
@@ -94,10 +92,18 @@ public class VueControleur extends Application {
         this.tuiles = new DragPane[plateau.hauteur][plateau.largeur];
 
         // création des bouton et placement dans la grille
+        ArrayList<File> images = new ArrayList<>(Arrays.asList(new File("src/image").listFiles()));
+        Collections.shuffle(images);
+
         for (int i = 0; i < plateau.hauteur; i++) {
             for (int j = 0; j < plateau.largeur; j++) {
                 Case c = plateau.cases[i][j];
-                DragPane p = new DragPane(i, j, plateau, c);
+                DragPane p;
+                if (c.hasSymbol()) {
+                    p = new DragPane(i, j, plateau, c, new Image("image/" + images.get(c.symbole).getName()));
+                } else {
+                    p = new DragPane(i, j, plateau, c, null);
+                }
                 this.tuiles[i][j] = p;
                 p.update();
                 gPane.add(p, j, i);
