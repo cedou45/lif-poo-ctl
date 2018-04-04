@@ -37,6 +37,8 @@ public class VueControleur extends Application {
     private BorderPane panelAccueil = new BorderPane();
     private BorderPane panelJeux = new BorderPane();
     private Button BoutonFacile = new Button("Facile"); 
+    private Button BoutonNormal = new Button("Normal"); 
+    private Button BoutonDifficile = new Button("Difficile"); 
     private Button BoutonRetour = new Button("Retour");
     private GridPane gPane = new GridPane();
     
@@ -44,7 +46,13 @@ public class VueControleur extends Application {
     public void start(Stage primaryStage) throws FileNotFoundException {
         
         BoutonFacile.setPrefSize(295, 50);
-        panelAccueil.setCenter(BoutonFacile);
+        panelAccueil.setTop(BoutonFacile);
+        
+        BoutonNormal.setPrefSize(295, 50);
+        panelAccueil.setCenter(BoutonNormal);
+        
+        BoutonDifficile.setPrefSize(295, 50);
+        panelAccueil.setBottom(BoutonDifficile);
         
         gPane.setGridLinesVisible(true);
         panelJeux.setCenter(gPane);
