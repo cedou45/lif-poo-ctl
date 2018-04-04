@@ -32,6 +32,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 /**
  * @author petit
@@ -45,14 +47,19 @@ public class VueControleur extends Application {
     private Button BoutonFacile = new Button("Facile"); 
     private Button BoutonNormal = new Button("Normal"); 
     private Button BoutonDifficile = new Button("Difficile"); 
-    private Button BoutonRetour = new Button("Retour");
+    private Button BoutonRetour = new Button("Retour accueil");
+    private Button BoutonRecommencer = new Button("Recommencer");
     private GridPane gPane = new GridPane();
+    private Stage dialog = new Stage();
+    private String configFilename;
     
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
         BoutonFacile.setPrefSize(295, 50);
         BoutonNormal.setPrefSize(295, 50);
         BoutonDifficile.setPrefSize(295, 50);
+        BoutonRetour.setPrefSize(295,50);
+        BoutonRecommencer.setPrefSize(295,50);
         
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
@@ -62,14 +69,14 @@ public class VueControleur extends Application {
         panelAccueil.setCenter(vbButtons);
         //panelAccueil.setBottom(BoutonDifficile);
         
-        gPane.setGridLinesVisible(true);
-        panelJeux.setCenter(gPane);
+        
+        
         
         BoutonFacile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
-                String configFilename = "easy.level";
+                configFilename = "easy.level";
                 try {
                     gPaneConfig(configFilename);
                 } catch (FileNotFoundException ex) {
@@ -83,7 +90,7 @@ public class VueControleur extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
-                String configFilename = "normal.level";
+                configFilename = "normal.level";
                 try {
                     gPaneConfig(configFilename);
                 } catch (FileNotFoundException ex) {
@@ -97,7 +104,7 @@ public class VueControleur extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
-                String configFilename = "hard.level";
+                configFilename = "hard.level";
                 try {
                     gPaneConfig(configFilename);
                 } catch (FileNotFoundException ex) {
@@ -107,6 +114,37 @@ public class VueControleur extends Application {
             }
         });
         
+        BoutonRetour.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+              
+                PanelAnnuaire.setCenter(panelAccueil);
+                dialog.close();
+            }
+        });
+        
+        BoutonRecommencer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+                System.out.println("M");
+                try {
+                    gPane.getChildren().clear();
+                    gPane.setGridLinesVisible(true);
+                    gPaneConfig(configFilename);
+                    
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                dialog.close();
+            }
+        });
+       
+        gPane.setGridLinesVisible(true);
+        panelJeux.setCenter(gPane);
+        
        
         PanelAnnuaire.setCenter(panelAccueil);
 
@@ -114,7 +152,8 @@ public class VueControleur extends Application {
         
         primaryStage.setTitle("Casse tête - Lignes");
         primaryStage.setScene(scene);
-        primaryStage.show();    }
+        primaryStage.show();    
+    }
     
     
     /**
@@ -128,13 +167,13 @@ public class VueControleur extends Application {
         File levelConfig = new File(configFilename);
 
         Plateau plateau;
+        
         try {
             plateau = new Plateau(levelConfig);
         } catch (NoSuchElementException e) {
             System.out.println("Le fichier de configuration " + configFilename + " est incorrect");
             return;
         }
-
         this.tuiles = new DragPane[plateau.hauteur][plateau.largeur];
 
         // création des bouton et placement dans la grille
@@ -151,33 +190,29 @@ public class VueControleur extends Application {
                     p = new DragPane(i, j, plateau, c, null);
                 }
                 this.tuiles[i][j] = p;
-                p.update();
+                p.reDraw();
                 gPane.add(p, j, i);
             }
-            // un controleur (EventHandler) par bouton écoute et met à jour le champ affichage
-            /*t.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                
-                @Override
-                public void handle(MouseEvent event) {
-                    affichage.setText(affichage.getText() + t.getText());
-                }
-                
-            });*/
-
-
         }
 
 
         plateau.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                for (int i = 0; i < plateau.hauteur; ++i) {
-                    for (int j = 0; j < plateau.largeur; ++j) {
-                        tuiles[i][j].update();
-                    }
+                if(plateau.partieTerminee){
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+                    VBox vbButtons = new VBox();
+                    vbButtons.setSpacing(10);
+                    vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
+                    vbButtons.getChildren().addAll(new Text("BRAVO !"),BoutonRecommencer,BoutonRetour);
+                    Scene dialogScene = new Scene(vbButtons, 300, 200);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
                 }
             }
         });
+        
+        
     }
 
 }

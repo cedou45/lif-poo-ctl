@@ -1,6 +1,8 @@
 package mvc;
 
 import java.io.FileNotFoundException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -71,11 +73,16 @@ public class DragPane extends Pane {
         }
         this.getChildren().add(this.ligneEntree);
         this.getChildren().add(this.ligneSortie);
-        
-        
+        plateau.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                reDraw();
+            }
+        });
+
     }
 
-    void update() {
+    void reDraw() {
         if (!this.c.hasSymbol()) {
             this.drawLine(c, c.getEntree(), this.ligneEntree);
             this.drawLine(c, c.getSortie(), this.ligneSortie);
