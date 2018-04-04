@@ -1,10 +1,5 @@
 package mvc;
 
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -18,6 +13,8 @@ import modele.Case;
 import modele.Lien;
 import modele.Plateau;
 
+import java.util.ArrayList;
+
 /**
  * Créé par victor le 28/03/18.
  */
@@ -27,11 +24,13 @@ public class DragPane extends Pane {
     private Line ligneEntree;
     private Line ligneSortie;
     private Plateau plateau;
+    private ArrayList<Color> colors;
 
-    DragPane(int ligne, int colonne, Plateau plateau, Case c, Image imageFile) {
+    DragPane(int ligne, int colonne, Plateau plateau, Case c, ArrayList<Color> colors, Image imageFile) {
         this.setPrefSize(tailleCase, tailleCase);
         this.c = c;
         this.plateau = plateau;
+        this.colors = colors;
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -111,8 +110,8 @@ public class DragPane extends Pane {
 
         if (c.getChemin() == this.plateau.getCheminActuel()) {
             ligne.setStroke(Color.RED);
-        } else {
-            ligne.setStroke(Color.BLUE);
+        } else if (c.hasChemin()) {
+            ligne.setStroke(colors.get(this.plateau.getChemins().indexOf(c.getChemin())));
         }
     }
 }

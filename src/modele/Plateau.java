@@ -146,5 +146,9 @@ public class Plateau extends Observable {
     public Chemin getCheminActuel() {
         return cheminActuel;
     }
+
+    public ArrayList<Chemin> getChemins() {
+        return chemins;
+    }
 }
 

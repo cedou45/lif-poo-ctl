@@ -9,11 +9,14 @@ package mvc;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import modele.Case;
 import modele.Plateau;
@@ -23,15 +26,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 /**
  * @author petit
@@ -137,6 +131,17 @@ public class VueControleur extends Application {
 
         this.tuiles = new DragPane[plateau.hauteur][plateau.largeur];
 
+        ArrayList<Color> colors = new ArrayList<>();
+        colors.add(Color.AQUA);
+        colors.add(Color.CHARTREUSE);
+        colors.add(Color.CRIMSON);
+        colors.add(Color.BLUE);
+        colors.add(Color.GREEN);
+        colors.add(Color.MAROON);
+        colors.add(Color.VIOLET);
+        colors.add(Color.YELLOW);
+        Collections.shuffle(colors);
+
         // création des bouton et placement dans la grille
         ArrayList<File> images = new ArrayList<>(Arrays.asList(new File("src/image").listFiles()));
         Collections.shuffle(images);
@@ -146,9 +151,9 @@ public class VueControleur extends Application {
                 Case c = plateau.cases[i][j];
                 DragPane p;
                 if (c.hasSymbol()) {
-                    p = new DragPane(i, j, plateau, c, new Image("image/" + images.get(c.symbole).getName()));
+                    p = new DragPane(i, j, plateau, c, colors, new Image("image/" + images.get(c.symbole).getName()));
                 } else {
-                    p = new DragPane(i, j, plateau, c, null);
+                    p = new DragPane(i, j, plateau, c, colors, null);
                 }
                 this.tuiles[i][j] = p;
                 p.update();
