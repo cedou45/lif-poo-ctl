@@ -8,8 +8,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.LineBuilder;
-import javafx.scene.text.Text;
 import modele.Case;
 import modele.Lien;
 import modele.Plateau;
@@ -20,10 +18,14 @@ import modele.Plateau;
 public class DragPane extends Pane {
     static final int tailleCase = 100;
     private Case c;
-    private Text text;
+    private Line ligneEntree;
+    private Line ligneSortie;
+    private Plateau plateau;
 
     DragPane(int ligne, int colonne, Plateau plateau, Case c) {
+        this.setPrefSize(tailleCase, tailleCase);
         this.c = c;
+        this.plateau = plateau;
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -40,67 +42,63 @@ public class DragPane extends Pane {
             plateau.terminerChemin();
             event.consume();
         });
-        this.text = new Text(c.getEntree() + " | " + c.getSortie());
-        this.getChildren().add(this.text);
+        this.ligneEntree = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
+        this.ligneSortie = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
+        this.ligneEntree.setStrokeWidth(10);
+        this.ligneSortie.setStrokeWidth(10);
+        this.ligneEntree.setVisible(false);
+        this.ligneSortie.setVisible(false);
         if (this.c.hasSymbol()) {
             ImageView image = new ImageView(new Image("image/" + this.c.symbole + ".jpg"));
             image.setFitWidth(tailleCase);
             image.setFitHeight(tailleCase);
             this.getChildren().add(image);
+        } else {
+            this.drawLine(c, c.getEntree(), this.ligneEntree);
+            this.drawLine(c, c.getSortie(), this.ligneSortie);
         }
+        this.getChildren().add(this.ligneEntree);
+        this.getChildren().add(this.ligneSortie);
     }
 
     void update() {
-        this.setPrefSize(tailleCase, tailleCase);
         if (!this.c.hasSymbol()) {
-            this.text.setText(this.c.getEntree() + " | " + this.c.getSortie());
-            this.drawLine(c.getEntree());
-            this.drawLine(c.getSortie());
+            this.drawLine(c, c.getEntree(), this.ligneEntree);
+            this.drawLine(c, c.getSortie(), this.ligneSortie);
         }
     }
-    
-    public void drawLine(Lien entree){
-        Line redLine = LineBuilder.create()
-                        .startX(0)
-                        .startY(0)
-                        .build();
-        if("TOP".equals(entree.name())){
-            redLine = LineBuilder.create()
-                        .startX(this.getWidth()/2)
-                        .startY(0)
-                        .endX(this.getWidth()/2)
-                        .endY(this.getHeight()/2)
-                        .fill(Color.RED)
-                        .build();
+
+    public void drawLine(Case c, Lien cote, Line ligne) {
+        ligne.setEndX(this.getWidth() / 2);
+        ligne.setEndY(this.getHeight() / 2);
+        ligne.setVisible(true);
+        switch (cote) {
+            case TOP:
+                ligne.setStartX(this.getWidth() / 2);
+                ligne.setStartY(0);
+                break;
+            case RIGHT:
+                ligne.setStartX(this.getWidth());
+                ligne.setStartY(this.getHeight() / 2);
+                break;
+            case BOTTOM:
+                ligne.setStartX(this.getWidth() / 2);
+                ligne.setStartY(this.getHeight());
+                break;
+            case LEFT:
+                ligne.setStartX(0);
+                ligne.setStartY(this.getHeight() / 2);
+                break;
+            case NONE:
+            default:
+                ligne.setVisible(false);
+                break;
         }
-        if("RIGHT".equals(entree.name())){
-            redLine = LineBuilder.create()
-                        .startX(this.getWidth())
-                        .startY(this.getHeight()/2)
-                        .endX(this.getWidth()/2)
-                        .endY(this.getHeight()/2)
-                        .fill(Color.RED)
-                        .build();
+
+        if (c.getChemin() == this.plateau.getCheminActuel()) {
+            ligne.setStroke(Color.RED);
+        } else {
+            ligne.setStroke(Color.BLUE);
         }
-        if("BOTTOM".equals(entree.name())){
-            redLine = LineBuilder.create()
-                        .startX(this.getWidth()/2)
-                        .startY(this.getHeight()/2)
-                        .endX(this.getWidth()/2)
-                        .endY(this.getHeight())
-                        .fill(Color.RED)
-                        .build();
-        }
-        if("LEFT".equals(entree.name())){
-            redLine = LineBuilder.create()
-                        .startX(0)
-                        .startY(this.getHeight()/2)
-                        .endX(this.getWidth()/2)
-                        .endY(this.getHeight()/2)
-                        .fill(Color.RED)
-                        .build();
-        }
-        
-        this.getChildren().add(redLine);
     }
 }

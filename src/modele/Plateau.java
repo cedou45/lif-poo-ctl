@@ -143,5 +143,9 @@ public class Plateau extends Observable {
         }
         return true;
     }
+
+    public Chemin getCheminActuel() {
+        return cheminActuel;
+    }
 }
 
