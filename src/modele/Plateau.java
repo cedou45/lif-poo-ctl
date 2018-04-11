@@ -15,6 +15,7 @@ public class Plateau extends Observable {
     public final Case[][] cases;
     public final ArrayList<Chemin> chemins;
     private Chemin cheminActuel;
+    public boolean partieTerminee = false;
 
     public Plateau(File configFile) throws FileNotFoundException {
         Scanner configScanner = new Scanner(configFile);
@@ -104,6 +105,9 @@ public class Plateau extends Observable {
         if (this.cheminActuel != null) {
             if (this.cheminActuel.getDerniere().isPair(this.cheminActuel.getPremiere())) {
                 this.chemins.add(this.cheminActuel);
+                if(this.caseVide()){
+                    partieTerminee = true;
+                }
             } else {
                 this.effacerChemin(this.cheminActuel);
             }
@@ -132,7 +136,7 @@ public class Plateau extends Observable {
         this.chemins.remove(chemin);
     }
     
-    private boolean caseVide(){
+    public boolean caseVide(){
         for(int i = 0;i<this.hauteur;i++){
             for(int j = 0;j<this.largeur;j++){
                 if(!this.cases[i][j].hasChemin()){
