@@ -34,6 +34,11 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -70,7 +75,7 @@ public class VueControleur extends Application {
         
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
-        vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
+        vbButtons.setPadding(new Insets(100, 10, 10, 100)); 
         vbButtons.getChildren().addAll(BoutonFacile, BoutonNormal, BoutonDifficile);
         
         panelAccueil.setCenter(vbButtons);
