@@ -127,14 +127,6 @@ public class Plateau extends Observable {
             notifyObservers();
         }
     }
-    
-    public void supprimerToutChemin(){
-        for(int i=0;i<chemins.size();i++){
-            effacerChemin(chemins.get(i));
-        }
-        setChanged();
-        notifyObservers();
-    }
 
     private void effacerChemin(Chemin chemin) {
         for (Case c : chemin) {

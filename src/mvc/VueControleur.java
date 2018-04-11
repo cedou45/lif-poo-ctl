@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -55,9 +56,12 @@ public class VueControleur extends Application {
     private GridPane gPane = new GridPane();
     private Stage dialog = new Stage();
     private String configFilename;
+    private Plateau plateau;
     
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
+
+                            dialog.initModality(Modality.APPLICATION_MODAL);
         BoutonFacile.setPrefSize(295, 50);
         BoutonNormal.setPrefSize(295, 50);
         BoutonDifficile.setPrefSize(295, 50);
@@ -85,6 +89,7 @@ public class VueControleur extends Application {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                PanelAnnuaire.getChildren().remove(panelAccueil);
                 PanelAnnuaire.setCenter(panelJeux);
             }
         });
@@ -99,6 +104,7 @@ public class VueControleur extends Application {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                PanelAnnuaire.getChildren().remove(panelAccueil);
                 PanelAnnuaire.setCenter(panelJeux);
             }
         });
@@ -113,6 +119,7 @@ public class VueControleur extends Application {
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                PanelAnnuaire.getChildren().remove(panelAccueil);
                 PanelAnnuaire.setCenter(panelJeux);
             }
         });
@@ -121,7 +128,7 @@ public class VueControleur extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
-              
+                PanelAnnuaire.getChildren().remove(panelJeux);
                 PanelAnnuaire.setCenter(panelAccueil);
                 dialog.close();
             }
@@ -131,19 +138,18 @@ public class VueControleur extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 // TODO Auto-generated method stub
-                System.out.println("M");
+                PanelAnnuaire.getChildren().remove(panelJeux);  
                 try {
-                    gPane.getChildren().clear();
-                    gPane.setGridLinesVisible(true);
                     gPaneConfig(configFilename);
-                    
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
                 dialog.close();
+                panelJeux.setCenter(gPane);
+                PanelAnnuaire.setCenter(panelJeux);
             }
         });
+        
        
         gPane.setGridLinesVisible(true);
         panelJeux.setCenter(gPane);
@@ -169,8 +175,17 @@ public class VueControleur extends Application {
     public void gPaneConfig(String configFilename) throws FileNotFoundException{
         File levelConfig = new File(configFilename);
 
-        Plateau plateau;
-        
+        if (plateau != null) {
+            plateau.deleteObservers();
+        }
+        int m = 0;
+        while (m < gPane.getChildren().size()) {
+            if (gPane.getChildren().get(m) instanceof DragPane) {
+                gPane.getChildren().remove(gPane.getChildren().get(m));
+            } else {
+                ++m;
+            }
+        }
         try {
             plateau = new Plateau(levelConfig);
         } catch (NoSuchElementException e) {
@@ -214,7 +229,6 @@ public class VueControleur extends Application {
             @Override
             public void update(Observable o, Object arg) {
                 if(plateau.partieTerminee){
-                    dialog.initModality(Modality.APPLICATION_MODAL);
                     VBox vbButtons = new VBox();
                     vbButtons.setSpacing(10);
                     vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
@@ -222,9 +236,12 @@ public class VueControleur extends Application {
                     Scene dialogScene = new Scene(vbButtons, 300, 200);
                     dialog.setScene(dialogScene);
                     dialog.show();
+
                 }
             }
         });
+        
+        
         
         
     }
