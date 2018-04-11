@@ -17,6 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modele.Case;
 import modele.Plateau;
@@ -26,23 +28,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 
 /**
  * @author petit
@@ -79,6 +64,7 @@ public class VueControleur extends Application {
                 public void handle(ActionEvent arg0) {
                     try {
                         gPaneConfig(level);
+                        configFilename = level;
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
                     }
