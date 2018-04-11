@@ -55,8 +55,8 @@ public class DragPane extends Pane {
         
         this.ligneEntree = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
         this.ligneSortie = new Line(this.getWidth() / 2, this.getHeight() / 2, this.getWidth() / 2, this.getHeight() / 2);
-        this.ligneEntree.setStrokeWidth(10);
-        this.ligneSortie.setStrokeWidth(10);
+        this.ligneEntree.setStrokeWidth(20);
+        this.ligneSortie.setStrokeWidth(20);
         this.ligneEntree.setVisible(false);
         this.ligneSortie.setVisible(false);
         if (this.c.hasSymbol()) {

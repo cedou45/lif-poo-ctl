@@ -104,10 +104,10 @@ public class Plateau extends Observable {
         if (this.cheminActuel != null) {
             if (this.cheminActuel.getDerniere().isPair(this.cheminActuel.getPremiere())) {
                 this.chemins.add(this.cheminActuel);
-                this.cheminActuel = null;
             } else {
                 this.effacerChemin(this.cheminActuel);
             }
+            this.cheminActuel = null;
 
             setChanged();
             notifyObservers();

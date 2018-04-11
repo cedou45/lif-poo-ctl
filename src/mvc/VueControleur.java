@@ -9,13 +9,11 @@ package mvc;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import modele.Case;
@@ -36,89 +34,59 @@ public class VueControleur extends Application {
     private BorderPane PanelAnnuaire = new BorderPane();
     private BorderPane panelAccueil = new BorderPane();
     private BorderPane panelJeux = new BorderPane();
-    private Button BoutonFacile = new Button("Facile"); 
-    private Button BoutonNormal = new Button("Normal"); 
-    private Button BoutonDifficile = new Button("Difficile"); 
-    private Button BoutonRetour = new Button("Retour");
     private GridPane gPane = new GridPane();
-    
+
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        BoutonFacile.setPrefSize(295, 50);
-        BoutonNormal.setPrefSize(295, 50);
-        BoutonDifficile.setPrefSize(295, 50);
-        
-        VBox vbButtons = new VBox();
-        vbButtons.setSpacing(10);
-        vbButtons.setPadding(new Insets(0, 20, 10, 20)); 
-        vbButtons.getChildren().addAll(BoutonFacile, BoutonNormal, BoutonDifficile);
-        
-        panelAccueil.setCenter(vbButtons);
-        //panelAccueil.setBottom(BoutonDifficile);
-        
+
+        int levelCount = 30;
+        int colsCout = (int) Math.floor(Math.sqrt(levelCount));
+
+        GridPane grilleBoutons = new GridPane();
+        for (int i = 0; i < levelCount; ++i) {
+            String level = String.valueOf(i + 1) + ".level";
+            Button bouton = new Button(String.valueOf(i + 1));
+            bouton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                    try {
+                        gPaneConfig(level);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    PanelAnnuaire.setCenter(panelJeux);
+                }
+            });
+
+
+            bouton.setPrefSize(100, 100);
+            grilleBoutons.add(bouton, i % colsCout, (int) Math.floor(i / colsCout));
+        }
+
+
+        panelAccueil.setCenter(grilleBoutons);
+
         gPane.setGridLinesVisible(true);
         panelJeux.setCenter(gPane);
-        
-        BoutonFacile.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                String configFilename = "easy.level";
-                try {
-                    gPaneConfig(configFilename);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                PanelAnnuaire.setCenter(panelJeux);
-            }
-        });
-        
-        BoutonNormal.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                String configFilename = "normal.level";
-                try {
-                    gPaneConfig(configFilename);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                PanelAnnuaire.setCenter(panelJeux);
-            }
-        });
-        
-        BoutonDifficile.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                String configFilename = "hard.level";
-                try {
-                    gPaneConfig(configFilename);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                PanelAnnuaire.setCenter(panelJeux);
-            }
-        });
-        
-       
+
         PanelAnnuaire.setCenter(panelAccueil);
 
-        Scene scene = new Scene(PanelAnnuaire, 500, 400);
-        
+        Scene scene = new Scene(PanelAnnuaire, 500, 500);
+
         primaryStage.setTitle("Casse tête - Lignes");
         primaryStage.setScene(scene);
-        primaryStage.show();    }
-    
-    
+        primaryStage.show();
+    }
+
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
-    
-    public void gPaneConfig(String configFilename) throws FileNotFoundException{
+
+    public void gPaneConfig(String configFilename) throws FileNotFoundException {
         File levelConfig = new File(configFilename);
 
         Plateau plateau;
